@@ -1,0 +1,1 @@
+Design a backend system for a new enterprise application that Cleartrip is launching, ClearFit. Cleartrip is partnering up with gyms across Bangalore to enter into the fitness space. 
