@@ -1,12 +1,13 @@
 package fitnessBooking;
 import java.util.*;
 
+import static java.util.Objects.nonNull;
+
 public class ClearFitAdmin {
 
     private Map<String,Centre> centres;
 
-    public ClearFitAdmin() {
-        CentreRepository centreRepository = new CentreRepository();
+    public ClearFitAdmin(CentreRepository centreRepository) {
         this.centres = centreRepository.getCentres();
     }
 
@@ -46,16 +47,24 @@ public class ClearFitAdmin {
         Slot slot = new Slot(startTime,endTime);
         slot.setSeats(availableSlots);
 
-        Optional<Workout> workout =center.getWorkouts().stream().filter(w->w.getWorkoutType().equals(workoutType)).findFirst();
-        if(workout.isPresent()){
-            workout.get().getSlots().add(slot);
+        if(nonNull(center.getWorkouts()) && !center.getWorkouts().isEmpty()) {
+            Optional<Workout> workout = center.getWorkouts().stream().filter(w -> w.getWorkoutType().equals(workoutType)).findFirst();
+            if(workout.isPresent()) {
+                workout.get().getSlots().add(slot);
+            }else{
+                addNewWorkout(center,workoutType, slot);
+            }
         }else{
-            Workout newWorkout = new Workout(workoutType);
-            List<Slot> slots = new ArrayList<>();
-            newWorkout.setSlots(slots);
-            center.setWorkouts(List.of(newWorkout));
+            addNewWorkout(center,workoutType, slot);
         }
         System.out.println("Added workout timing for" + workoutType);
+    }
+    private void addNewWorkout(Centre center, String workoutType, Slot slot) {
+        Workout newWorkout = new Workout(workoutType);
+        List<Slot> slots = new ArrayList<>();
+        slots.add(slot);
+        newWorkout.setSlots(slots);
+        center.addWorkout(newWorkout);
     }
 
     private boolean validateCenterTimings(Centre centre, int startTime, int endTime){

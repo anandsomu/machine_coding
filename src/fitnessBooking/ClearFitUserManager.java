@@ -6,11 +6,8 @@ public class ClearFitUserManager {
     private Map<String, User> users;
     private Map<String,Centre> centres;
 
-    public ClearFitUserManager() {
-        UserRepository userRepository = new UserRepository();
+    public ClearFitUserManager(UserRepository userRepository, CentreRepository centreRepository) {
         this.users = userRepository.getUsers();
-
-        CentreRepository centreRepository = new CentreRepository();
         this.centres = centreRepository.getCentres();
     }
 
@@ -46,17 +43,21 @@ public class ClearFitUserManager {
 
         User user = this.users.get(userName);
         Centre centre = this.centres.get(centerName);
-
+        final boolean[] booked = new boolean[1];
         centre.getWorkouts().stream().filter(w->w.getWorkoutType().equals(workoutType))
                 .forEach(w->{
                     w.getSlots().forEach(slot -> {
                         if(slot.getStartTime()==startTime && slot.getEndTime()==endTime){
-                            user.bookings.add(new Booking(centre, slot));
+                            user.addBooking(new Booking(centre, slot));
                             int updatedSeats = slot.getSeats()-1;
                             slot.setSeats(updatedSeats);
+                            booked[0] =true;
                             System.out.println("Booked");
                         }
                     });
+                    if(!booked[0]){
+                        System.out.println("Invalid Timing");
+                    }
                 });
     }
 

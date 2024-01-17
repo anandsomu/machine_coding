@@ -20,8 +20,11 @@ public class User {
         return bookings;
     }
 
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
+    public void addBooking(Booking booking) {
+        if(this.bookings==null){
+            this.bookings = new ArrayList<>();
+        }
+        bookings.add(booking);
     }
 
     public void removeBookings(Centre centre, int startTime, int endTime) {

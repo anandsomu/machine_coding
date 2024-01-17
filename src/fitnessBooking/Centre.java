@@ -36,10 +36,17 @@ public class Centre {
     }
 
     public void addSlot(Slot slot) {
-        if(this.slots.isEmpty()){
+        if(this.slots == null){
             this.slots = new ArrayList<>();
         }
         slots.add(slot);
+    }
+
+    public void addWorkout(Workout workout) {
+        if(this.workouts==null){
+            this.workouts = new ArrayList<>();
+        }
+        workouts.add(workout);
     }
 
     public List<String> getActivities() {

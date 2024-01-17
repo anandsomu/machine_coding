@@ -4,7 +4,9 @@ import com.sun.tools.javac.util.List;
 
 public class ClearFit {
     public static void main(String[] args) {
-        ClearFitAdmin clearFitAdmin = new ClearFitAdmin();
+        CentreRepository centreRepository = new CentreRepository();
+        UserRepository userRepository = new UserRepository();
+        ClearFitAdmin clearFitAdmin = new ClearFitAdmin(centreRepository);
 
         clearFitAdmin.addCentre("Koramangala");
         Slot t1 = new Slot(6, 9);
@@ -23,11 +25,11 @@ public class ClearFit {
          */
 
         clearFitAdmin.addWorkout("Koramangala", "Cardio", 7,8,100);
-        //clearFitAdmin.addWorkout("Koramangala", "Yoga", 8,9,200);
-        //clearFitAdmin.addWorkout("Koramangala", "Cardio", 7,8,100);
+        clearFitAdmin.addWorkout("Koramangala", "Yoga", 8,9,200);
+        clearFitAdmin.addWorkout("Koramangala", "Cardio", 9,10,100);
 
-        ClearFitUserManager userManager = new ClearFitUserManager();
-        //userManager.registerUser("Vaihbhav");
+        ClearFitUserManager userManager = new ClearFitUserManager(userRepository,centreRepository);
+        userManager.registerUser("Vaihbhav");
 
         /**
          * viewWorkoutAvailability(“Weights”)
@@ -38,8 +40,11 @@ public class ClearFit {
          * bookSession(“Vaibhav”, “Koramangala”, “Weight”, 6, 7)
          */
 
-        //userManager.viewWorkoutAvailability("Cardio");
-
+        userManager.viewWorkoutAvailability("Cardio");
+        // incorrect time slot
+        userManager.bookASession("Vaihbhav", "Koramangala", "Cardio",6,7);
+        // correct time slot
+        userManager.bookASession("Vaihbhav", "Koramangala", "Cardio",7,8);
 
     }
 }
